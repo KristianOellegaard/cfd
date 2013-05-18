@@ -9,9 +9,14 @@ import logging
 
 logger = logging.getLogger("cfd")
 logger.setLevel(logging.DEBUG)
-# print function_registry.items
 data = yaml.safe_load(subprocess.check_output(['/usr/bin/facter', '--yaml']))
-r = requests.post(os.environ.get('CFD_SERVER', "http://localhost:8000/") + "%s/" % socket.getfqdn(), data=data)
+with open("/etc/cfd/config.yaml") as f:
+    config = yaml.safe_load(f)
+    assert 'api_key' in config, "Please provide api_key in /etc/cfd/config.yaml"
+r = requests.post(
+    os.environ.get('CFD_SERVER', "http://localhost:8000/") + "%s/" % socket.getfqdn(),
+    data=data, headers={'Accept': 'application/json', 'APIKEY': config['api_key']}
+)
 
 fqdn = socket.getfqdn()
 
@@ -29,7 +34,11 @@ def traverse_items(dct):
     else:
         return dct
 
-for item in traverse_items(r.json()):
+try:
+    json_data = r.json()
+except ValueError:
+    exit(1)
+for item in traverse_items(json_data):
     kwargs = item.copy()
     kwargs.pop("name")
     kwargs.pop("type")

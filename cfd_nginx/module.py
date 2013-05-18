@@ -76,7 +76,6 @@ class NginxServer(CFDModule):
 class NginxVirtualHost(CFDModule):
     def __init__(self, domain):
         super(NginxVirtualHost, self).__init__()
-
         self.add(
             CFDFile(path="/etc/nginx/sites-available/%s.conf" % domain, ensure=True, content="Hello!")
         )
