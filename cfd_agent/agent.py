@@ -37,6 +37,7 @@ def traverse_items(dct):
 try:
     json_data = r.json()
 except ValueError:
+    print r.text
     exit(1)
 for item in traverse_items(json_data):
     kwargs = item.copy()

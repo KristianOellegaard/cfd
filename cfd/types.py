@@ -21,7 +21,7 @@ def name_decorator(f):
     return inner
 
 
-class CFDFunctionMetaclass(type):
+class CFDTypeMetaclass(type):
     def __new__(upperattr_metaclass, future_class_name,
                 future_class_parents, future_class_attr):
 
@@ -32,22 +32,22 @@ class CFDFunctionMetaclass(type):
         return type.__new__(upperattr_metaclass, future_class_name, future_class_parents, future_class_attr)
 
 
-class CFDFunction(object):
-    __metaclass__ = CFDFunctionMetaclass
+class CFDType(object):
+    __metaclass__ = CFDTypeMetaclass
 
     def as_dict(self):
         return {}
 
     def execute(self, facts):
-        raise Exception("You must define a execute function on the CFDFunction subclass")
+        raise Exception("You must define a execute function on the CFDType subclass")
 
 
-class CFDExecuteCommand(CFDFunction):
+class CFDExecuteCommand(CFDType):
     def __init__(self):
         pass
 
 
-class CFDFile(CFDFunction):
+class CFDFile(CFDType):
     def __init__(self, path, ensure, content):
         self.path = path
         self.ensure = ensure
@@ -81,31 +81,5 @@ class CFDFile(CFDFunction):
                 os.remove(self.path)
 
 
-class CFDPackage(CFDFunction):
-    def __init__(self, package_name, ensure=True, package_manager=None):
-        self.package_name = package_name
-        self.ensure = ensure
-        self.package_manager = package_manager
-
-    def as_dict(self):
-        return {
-            'package_name': self.package_name,
-            'package_manager': self.package_manager,
-            'ensure': self.ensure
-        }
-
-    def execute(self, facts):
-        package_manager = self.package_manager
-        cmd = None
-        if not package_manager:
-            if facts['osfamily'] == 'Debian':
-                package_manager = 'apt-get'
-        if package_manager == 'apt-get':
-            cmd = ['apt-get', 'install', '-f', '-y', self.package_name]
-        if not cmd:
-            raise Exception("Package manager %s not found" % package_manager)
-        subprocess.check_call(cmd, stdout=subprocess.PIPE)
-
 function_registry.register(CFDExecuteCommand)
 function_registry.register(CFDFile)
-function_registry.register(CFDPackage)

@@ -1,7 +1,8 @@
 from django.template import Context
 from django.template.loader import render_to_string
-from cfd.functions import CFDPackage, CFDFile
+from cfd.types import CFDFile
 from cfd.modules import CFDModule
+from cfd_package.types import CFDPackage
 
 
 class NginxServer(CFDModule):
