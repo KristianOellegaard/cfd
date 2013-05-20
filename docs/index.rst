@@ -13,6 +13,7 @@ Contents:
 
    usage/tutorial
    usage/types
+   usage/settings
 
 
 API/Developer docs:

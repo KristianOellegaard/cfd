@@ -10,18 +10,17 @@ import logging
 logger = logging.getLogger("cfd")
 logger.setLevel(logging.DEBUG)
 
+
 def run_agent():
     data = yaml.safe_load(subprocess.check_output(['/usr/bin/facter', '--yaml']))
     with open("/etc/cfd/config.yaml") as f:
         config = yaml.safe_load(f)
         assert 'api_key' in config, "Please provide api_key in /etc/cfd/config.yaml"
+    cfd_server = config.get('server', os.environ.get('CFD_SERVER', "http://localhost:8000/"))
     r = requests.post(
-        os.environ.get('CFD_SERVER', "http://localhost:8000/") + "%s/" % socket.getfqdn(),
+        cfd_server + "%s/" % socket.getfqdn(),
         data=data, headers={'Accept': 'application/json', 'APIKEY': config['api_key']}
     )
-
-    fqdn = socket.getfqdn()
-
 
     def traverse_items(dct):
         if dct.get('items'):
