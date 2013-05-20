@@ -1,4 +1,7 @@
 
+class AlreadyRegisteredException(Exception):
+    pass
+
 class CFDPool(dict):
     """
     A pool you can register components in. Quite similar to the way models are registered in the django admin. It
@@ -12,7 +15,7 @@ class CFDPool(dict):
     def register(self, itm, name=None):
         name = name or itm.__name__
         if name in self:
-            raise Exception("%s already registered" % name)
+            raise AlreadyRegisteredException("%s already registered" % name)
         self[name] = itm
 
 node_registry = CFDPool()
