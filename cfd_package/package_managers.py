@@ -68,7 +68,11 @@ class PipPackageManager(CFDPackageManager):
 
     def list_installed_packages(self):
         packages = subprocess.check_output(['pip', 'freeze'])
-        return packages.split("\n")
+        return [pkg.split("==")[0] for pkg in packages.split("\n")]
+
+    def version(self, package):
+        packages = subprocess.check_output(['pip', 'freeze'])
+        return ([pkg.split("==")[1] for pkg in packages.split("\n") if pkg.split("==")[0] == package] or [None])[0]
 
     def install(self, package, version=None):
         if version:
@@ -77,6 +81,6 @@ class PipPackageManager(CFDPackageManager):
             subprocess.check_call(['pip', 'install', '-q', package], stdout=subprocess.PIPE)
 
     def uninstall(self, package):
-        subprocess.check_call(['pip', 'uninstall', '-q', package], stdout=subprocess.PIPE)
+        subprocess.check_call(['pip', 'uninstall', '-q', '-y', package], stdout=subprocess.PIPE)
 
 package_manager_registry.register(PipPackageManager, 'pip')
