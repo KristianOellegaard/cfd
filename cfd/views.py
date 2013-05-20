@@ -6,6 +6,10 @@ from cfd.pool import node_registry
 
 @csrf_exempt
 def host(request, hostname):
+    """
+    Accepts a django request object and a hostname and returns the configuration for the given hostname. The view
+    goes through types for a give node and returns them in a flat
+    """
     facts = request.POST.copy()
     try:
         api_key = request.META.get("HTTP_APIKEY")

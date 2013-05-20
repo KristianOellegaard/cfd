@@ -11,6 +11,19 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   usage/tutorial
+   usage/types
+
+
+API/Developer docs:
+
+.. toctree::
+   :maxdepth: 2
+
+   developers/modules
+   developers/nodes
+   developers/types
+
 
 
 Indices and tables

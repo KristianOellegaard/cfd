@@ -33,6 +33,9 @@ class CFDTypeMetaclass(type):
 
 
 class CFDType(object):
+    """
+    Base class for any type in CFD
+    """
     __metaclass__ = CFDTypeMetaclass
 
     def as_dict(self):
@@ -48,7 +51,14 @@ class CFDExecuteCommand(CFDType):
 
 
 class CFDFile(CFDType):
-    def __init__(self, path, ensure, content):
+    """
+    CFDFile is a CFD type that will place a file on the hosts, to which it is assigned.
+
+    Example::
+
+        CFDFile("/etc/motd", content="Welcome to the server", ensure=True)
+    """
+    def __init__(self, path, content, ensure=True):
         self.path = path
         self.ensure = ensure
         self.content = content

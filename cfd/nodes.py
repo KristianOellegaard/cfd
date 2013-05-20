@@ -18,6 +18,26 @@ class CFDNodeMetaclass(type):
 
 
 class CFDNode(object):
+    """
+    Base class for nodes. Nodes inherit from this class or other nodes that eventually inherit from CFDNode.
+
+    Example::
+
+        class InternalServer(CFDNode):
+            modules = [
+                CFDFile("/etc/motd", content="An Acme Ltd server"),
+            ]
+
+        class WebServer(InternalServer):
+            modules = [
+                Nginx(),  # Use the nginx module with default settings
+            ]
+
+        class ASpecificServer(WebServer):
+            modules = [
+                NginxVirtualHost("domain.com"),
+            ]
+    """
     __metaclass__ = CFDNodeMetaclass
 
     def __init__(self, hostname, facts):

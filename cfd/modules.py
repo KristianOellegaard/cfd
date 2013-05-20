@@ -9,6 +9,9 @@ class CFDModuleMetaclass(type):
 
 
 class CFDModule(object):
+    """
+    Base class for modules
+    """
     __metaclass__ = CFDModuleMetaclass
 
     def __init__(self):

@@ -8,6 +8,15 @@ logger = logging.getLogger("cfd")
 
 
 class CFDPackage(CFDType):
+    """
+    CFDPackage is a generic type to describe a package to be installed on system using a package manager registered in
+    the package manager registry.
+
+    Example::
+
+        CFDPackage("nginx", ensure=True, package_manager='apt-get', version='1.0')
+
+    """
     def __init__(self, package_name, ensure=True, package_manager=None, version=None):
         self.package_name = package_name
         self.ensure = ensure
