@@ -1,6 +1,10 @@
 from cfd.pool import function_registry
 from cfd.types import CFDType
 from cfd_package.package_managers import package_manager_registry
+import logging
+
+logging.basicConfig()
+logger = logging.getLogger("cfd")
 
 
 class CFDPackage(CFDType):
@@ -14,7 +18,8 @@ class CFDPackage(CFDType):
         return {
             'package_name': self.package_name,
             'package_manager': self.package_manager,
-            'ensure': self.ensure
+            'ensure': self.ensure,
+            'version': self.version
         }
 
     def execute(self, facts):
@@ -25,8 +30,11 @@ class CFDPackage(CFDType):
 
         package_manager_class = package_manager_registry[package_manager]()
         if self.ensure:
+            logger.info("Installing %s %s" % (self.package_name, "version %s" % self.version if self.version else ''))
             package_manager_class.install(self.package_name, version=self.version)
         else:
-            package_manager_class.uninstall(self.package_name)
+            if package_manager_class.version(self.package_name):
+                logger.info("Uninstalling %s" % self.package_name)
+                package_manager_class.uninstall(self.package_name)
 
 function_registry.register(CFDPackage)
