@@ -52,6 +52,8 @@ class CFDNode(object):
                         self.add(item)
                 except Exception as e:
                     raise CFDException(u"%s: %s" % (type(e), e.message))
+        if not self.modules:
+            raise Exception("Please define at least one module for %s" % hostname)
 
     def add(self, module):
         self.modules.append(module)

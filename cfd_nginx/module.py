@@ -34,7 +34,8 @@ class NginxServer(CFDModule):
             worker_rlimit_core=None,
             worker_rlimit_nofile=None,
             worker_rlimit_sigpending=None,
-            working_directory=None):
+            working_directory=None,
+            **kwargs):
         super(NginxServer, self).__init__()
         self.accept_mutex = accept_mutex
         self.accept_mutex_delay = accept_mutex_delay
@@ -63,6 +64,8 @@ class NginxServer(CFDModule):
         self.worker_rlimit_nofile = worker_rlimit_nofile
         self.worker_rlimit_sigpending = worker_rlimit_sigpending
         self.working_directory = working_directory
+        for item, value in kwargs.items():
+            setattr(self, item, value)
 
         self.add(
             CFDPackage("nginx"),

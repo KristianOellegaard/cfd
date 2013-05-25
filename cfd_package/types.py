@@ -3,7 +3,6 @@ from cfd.types import CFDType
 from cfd_package.package_managers import package_manager_registry
 import logging
 
-logging.basicConfig()
 logger = logging.getLogger("cfd")
 
 

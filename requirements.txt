@@ -3,3 +3,4 @@ requests==1.2.0
 PyYAML
 South
 gunicorn
+dj-database-url

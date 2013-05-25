@@ -1,7 +1,8 @@
-from cfd.functions import CFDFile
+from cfd.types import CFDFile, CFDDebug
 from cfd.nodes import CFDNode
 from cfd.pool import node_registry
 from cfd_nginx.module import NginxServer, NginxVirtualHost
+from cfd_package.types import CFDPackage
 
 
 class WebServer(CFDNode):
@@ -10,11 +11,22 @@ class WebServer(CFDNode):
     ]
 
 
+class CFDServer(WebServer):
+    modules = [
+        CFDDebug("hello"),
+        CFDFile("/etc/motd", content="hello from CFD"),
+    ]
+
+node_registry.register(CFDServer, 'cfd.testorg.org')
+
+
 class SpecificWebServer(WebServer):
     @property
     def modules(self):
         return [
-            NginxVirtualHost(self.facts.get('hostname'))
+            NginxVirtualHost(self.facts.get('hostname')),
+            CFDPackage('zach', package_manager='pip', version='1.1', ensure=False),
+            CFDPackage('python-cloudfoundry', package_manager='pip', version='0.2', ensure=True)
         ]
 
 

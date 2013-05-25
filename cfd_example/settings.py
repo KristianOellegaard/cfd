@@ -155,3 +155,12 @@ LOGGING = {
         },
     }
 }
+
+try:
+    import yaml
+    import dj_database_url
+    with open('/etc/cfd/server.yaml') as f:
+        data = yaml.safe_load(f.read())
+        DATABASES = {'default': dj_database_url.parse(data['DATABASE_URL'])}
+except IOError:
+    pass

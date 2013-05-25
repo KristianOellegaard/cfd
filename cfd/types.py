@@ -4,7 +4,6 @@ from cfd.pool import function_registry
 import os
 import logging
 
-logging.basicConfig()
 logger = logging.getLogger("cfd")
 
 
@@ -50,6 +49,22 @@ class CFDExecuteCommand(CFDType):
         pass
 
 
+class CFDDebug(CFDType):
+    """
+    Prints the text provided as first argument.
+    """
+    def __init__(self, text):
+        self.text = text
+
+    def as_dict(self):
+        return {
+            'text': self.text,
+        }
+
+    def execute(self, facts):
+        logger.info(self.text)
+
+
 class CFDFile(CFDType):
     """
     CFDFile is a CFD type that will place a file on the hosts, to which it is assigned.
@@ -93,3 +108,4 @@ class CFDFile(CFDType):
 
 function_registry.register(CFDExecuteCommand)
 function_registry.register(CFDFile)
+function_registry.register(CFDDebug)
