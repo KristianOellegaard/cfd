@@ -1,11 +1,9 @@
 #!/usr/bin/env python
+import sys
+sys.path.append("/vagrant/scripts/")
+
+import subprocess
 from test_utils import basic_setup, ensure_dir, hostname_setup
 
-basic_setup()
-
-with open('/etc/cfd/config.yaml', 'w+') as f:
-    f.write("""---
-    server: 10.0.0.1
-    api_key: abcdef
-""")
-hostname_setup("server-1.testorg.org")
+basic_setup("server-1.testorg.org")
+subprocess.check_call(['sudo', 'cfd-agent'])

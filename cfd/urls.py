@@ -4,8 +4,6 @@ from django.conf.urls import patterns, include, url
 # from django.contrib import admin
 # admin.autodiscover()
 
-from cfd_example import definitions
-
 urlpatterns = patterns('',
     # Examples:
     url(r'^(?P<hostname>[\w\.\-]+)/$', 'cfd.views.host', name='host'),

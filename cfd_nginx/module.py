@@ -64,6 +64,7 @@ class NginxServer(CFDModule):
         self.worker_rlimit_nofile = worker_rlimit_nofile
         self.worker_rlimit_sigpending = worker_rlimit_sigpending
         self.working_directory = working_directory
+        self.extra_items = kwargs.items()
         for item, value in kwargs.items():
             setattr(self, item, value)
 
@@ -81,5 +82,9 @@ class NginxVirtualHost(CFDModule):
     def __init__(self, domain):
         super(NginxVirtualHost, self).__init__()
         self.add(
-            CFDFile(path="/etc/nginx/sites-available/%s.conf" % domain, ensure=True, content="Hello!")
+            CFDFile(
+                path="/etc/nginx/sites-available/%s.conf" % domain,
+                ensure=True,
+                content=render_to_string("cfd_nginx/virtual_host.conf", context_instance=Context({'virtual_host': self}))
+            ),
         )

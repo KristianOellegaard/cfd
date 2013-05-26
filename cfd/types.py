@@ -73,22 +73,24 @@ class CFDFile(CFDType):
 
         CFDFile("/etc/motd", content="Welcome to the server", ensure=True)
     """
-    def __init__(self, path, content, ensure=True):
+    def __init__(self, path, content, ensure=True, mode=None):
         self.path = path
         self.ensure = ensure
         self.content = content
+        self.mode = mode
 
     def as_dict(self):
         return {
             'path': self.path,
             'ensure': self.ensure,
-            'content': self.content
+            'content': self.content,
+            'mode': self.mode
         }
 
     def execute(self, facts):
         if self.ensure:
             try:
-                with open(self.path, 'r+') as f:
+                with open(self.path, 'r') as f:
                     previous_content = f.read()
             except IOError:
                 previous_content = ""
@@ -96,8 +98,10 @@ class CFDFile(CFDType):
             if diff:
                 logger.info("File Changed:\n" + "\n".join(diff))
             try:
-                with open(self.path, 'w+') as f:
+                with open(self.path, 'w') as f:
                     f.write(self.content)
+                    if self.mode:
+                        os.chmod(self.path, int(self.mode))
             except IOError:
                 logger.warn("Directory does not exist at %s" % self.path)
         else:

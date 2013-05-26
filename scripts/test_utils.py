@@ -2,10 +2,11 @@ import os
 import subprocess
 
 
-def basic_setup():
+def basic_setup(hostname):
+    hostname_setup(hostname)
     subprocess.check_call(['apt-get', 'update'])
     subprocess.check_call(['/usr/bin/sudo', '/usr/bin/apt-get', 'install', '-q', '-y', 'python-setuptools',
-                           'build-essential', 'python-dev', 'facter'])
+                           'build-essential', 'python-dev', 'facter', 'avahi-daemon', 'mdns-scan'])
     subprocess.check_call(['/usr/bin/sudo', '/usr/bin/python', 'setup.py', 'develop'], cwd="/var/lib/cfd/")
     ensure_dir('/etc/cfd/')
 

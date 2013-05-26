@@ -48,7 +48,10 @@ class CFDNode(object):
         for method in dir(self):
             if method.startswith("modules_"):
                 try:
-                    for item in getattr(self, method):
+                    mthd = getattr(self, method)
+                    if callable(mthd):
+                        mthd = mthd()
+                    for item in mthd:
                         self.add(item)
                 except Exception as e:
                     raise CFDException(u"%s: %s" % (type(e), e.message))

@@ -21,8 +21,9 @@ def run_agent():
     cfd_server = config.get('server', os.environ.get('CFD_SERVER', "http://localhost:8000/"))
     r = requests.post(
         cfd_server + "%s/" % hostname,
-        data=data, headers={'Accept': 'application/json', 'APIKEY': config['api_key']}
-    )
+        data=data,
+        headers={'Accept': 'application/json', 'APIKEY': config['api_key'], 'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
+    )  # the REQUESTED_WITH header is to tell Django to return AJAX friendly errors
 
     def traverse_items(dct, path=list()):
         if 'items' in dct:

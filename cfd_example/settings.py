@@ -124,6 +124,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'cfd',
     'cfd_nginx',
+    'cfd_example',
     'south',
 )
 
