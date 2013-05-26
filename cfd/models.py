@@ -16,7 +16,7 @@ class Fact(models.Model):
 
 class ApiKey(models.Model):
     server = models.ForeignKey(Server)
-    api_key = models.CharField(max_length=38)
+    api_key = models.CharField(max_length=56)
     date = models.DateTimeField(default=timezone.now)
     active = models.BooleanField()
 
